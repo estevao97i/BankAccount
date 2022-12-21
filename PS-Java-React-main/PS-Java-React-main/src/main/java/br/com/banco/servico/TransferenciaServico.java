@@ -1,34 +1,40 @@
 package br.com.banco.servico;
 
-import br.com.banco.entidades.Transferencia;
 import br.com.banco.repositorio.TransferenciaRepositorio;
-import lombok.AllArgsConstructor;
+import br.com.banco.servico.dto.TransferenciaDto;
+import br.com.banco.servico.mapper.TransferenciaMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
-public class TransferenciaServico {
+public class TransferenciaServico implements Serializable {
 
     private final TransferenciaRepositorio repositorio;
+    private final TransferenciaMapper mapper;
 
-    public List<Transferencia> findByDate(LocalDateTime data) {
+    public List<TransferenciaDto> findByDate(LocalDateTime data) {
         var listTransferencia= repositorio.listTransferenciaDate(data);
-        return listTransferencia;
+        return mapper.toDto(listTransferencia);
     }
 
-    public List<Transferencia> findByNomeOperador(String nome) {
+    public List<TransferenciaDto> findByNomeOperador(String nome) {
         var listTransferencia= repositorio.listTransferenciaPorNomeOperadorTransacao(nome);
-        return listTransferencia;
+        return mapper.toDto(listTransferencia);
     }
 
-    public List<Transferencia> findByNomeOperadorAndDate(String nome, LocalDateTime dataInic, LocalDateTime dataFim) {
+    public List<TransferenciaDto> findByNomeOperadorAndDate(String nome, LocalDateTime dataInic, LocalDateTime dataFim) {
+        if (dataInic.isAfter(dataFim)){
+            throw new RuntimeException("A data inicial deve ser anterior a data final");
+        }
         var listTransferencia= repositorio.listTransferenciaTodosParametros(nome, dataInic, dataFim);
-        return listTransferencia;
+        return mapper.toDto(listTransferencia);
     }
 
 }
