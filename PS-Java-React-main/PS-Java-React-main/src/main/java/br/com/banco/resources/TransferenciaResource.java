@@ -16,7 +16,7 @@ public class TransferenciaResource {
 
     private final TransferenciaServico servico;
 
-    @GetMapping(value = "oi")
+    @GetMapping(value = "data")
     public ResponseEntity<List<TransferenciaDto>> findByDate(@RequestParam("data") LocalDateTime data) {
         var listByDate = servico.findByDate(data);
 
