@@ -6,26 +6,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping(value = "transferencias")
 public class TransferenciaResource {
 
     private final TransferenciaServico servico;
 
-    @GetMapping(value = "data")
-    public ResponseEntity<List<TransferenciaDto>> findByDate(@RequestParam("data") LocalDateTime data) {
-        var listByDate = servico.findByDate(data);
+    @GetMapping()
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<List<TransferenciaDto>> findall() {
+        List<TransferenciaDto> listByDate = servico.findAll();
 
         return ResponseEntity.ok(listByDate);
     }
 
-    @GetMapping()
-    public String oi() {
-        return "oi";
+    @GetMapping(value = "data")
+    public ResponseEntity<List<TransferenciaDto>> findByDate(@RequestParam("data") String data) {
+        List<TransferenciaDto> listByDate = servico.findByDate(data);
+
+        return ResponseEntity.ok(listByDate);
     }
 
     @GetMapping(value = "nome-operador")
@@ -36,10 +39,11 @@ public class TransferenciaResource {
     }
 
     @GetMapping(value = "data-operador")
-    public ResponseEntity<List<TransferenciaDto>> findByNomeOperadorAndDate(@RequestParam("dataInic") LocalDateTime dataInicial,
-                                                                            @RequestParam("dataFim") LocalDateTime dataFinal,
+    public ResponseEntity<List<TransferenciaDto>> findByNomeOperadorAndDate(@RequestParam("dataInic") String dataInicial,
+                                                                            @RequestParam("dataFim") String dataFinal,
                                                                             @RequestParam("nomeOperadorTransacao") String nome) {
-        var listByDate = servico.findByNomeOperadorAndDate(nome, dataInicial, dataFinal);
+
+        List<TransferenciaDto> listByDate = servico.findByNomeOperadorAndDate(nome, dataInicial, dataFinal);
 
         return ResponseEntity.ok(listByDate);
     }

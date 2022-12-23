@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,8 +21,18 @@ public class TransferenciaServico implements Serializable {
     private final TransferenciaRepositorio repositorio;
     private final ModelMapper modelMapper;
 
-    public List<TransferenciaDto> findByDate(LocalDateTime data) {
-        var listTransferencia= repositorio.listTransferenciaDate(data);
+
+
+    public List<TransferenciaDto> findAll() {
+        var listTransferencia= repositorio.findAll();
+        return listTransferencia.stream()
+                .map(r -> modelMapper.map(r, TransferenciaDto.class)).collect(Collectors.toList());
+    }
+
+    public List<TransferenciaDto> findByDate(String data) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(("yyyy-MM-dd HH:mm:ss"));
+        var dateTime = LocalDateTime.parse(data, formatter);
+        var listTransferencia= repositorio.listTransferenciaDate(dateTime);
         return listTransferencia.stream()
                 .map(r -> modelMapper.map(r, TransferenciaDto.class)).collect(Collectors.toList());
     }
@@ -32,7 +43,10 @@ public class TransferenciaServico implements Serializable {
                 .map(r -> modelMapper.map(r, TransferenciaDto.class)).collect(Collectors.toList());
     }
 
-    public List<TransferenciaDto> findByNomeOperadorAndDate(String nome, LocalDateTime dataInic, LocalDateTime dataFim) {
+    public List<TransferenciaDto> findByNomeOperadorAndDate(String nome, String dataInicial, String dataFinal) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(("yyyy-MM-dd HH:mm:ss"));
+        var dataInic = LocalDateTime.parse(dataInicial, formatter);
+        var dataFim = LocalDateTime.parse(dataFinal, formatter);
         if (dataInic.isAfter(dataFim)){
             throw new RuntimeException("A data inicial deve ser anterior a data final");
         }
