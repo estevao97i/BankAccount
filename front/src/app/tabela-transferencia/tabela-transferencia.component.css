@@ -1,12 +1,67 @@
 table {
-  width: 100%;
+  width: 80%;
 }
 
 .mat-mdc-form-field {
   font-size: 14px;
-  width: 100%;
+  width: 80%;
 }
 
 td, th {
   width: 25%;
+}
+
+button {
+  margin: 16px 8px;
+  box-shadow: 10px;
+}
+
+.example-button-row {
+  display: table-cell;
+  width: 490px;
+}
+
+/* mat-button-toggle {
+  /* margin-left: 85%; */
+  /* margin: 4%; */
+  /* display: center; */
+.filtro {
+  /* display: table-cell; */
+  width: 100%;
+}
+
+.btn-pesquisar {
+  margin-top: -109px;
+  margin-left: 90%;
+}
+
+.table-transferencia {
+  margin-top: 2%;
+}
+
+.example-form-field {
+  /* margin-left: 50%; */
+  width: 200px;
+  /* height: 2%; */
+}
+
+.input-nome {
+  width: 200px;
+  height: 100px;
+  margin-left: 70%;
+  margin-top: -100px;
+}
+
+.input-data-inic {
+  width: 200px;
+  height: 100px;
+  margin-left: 10%;
+  margin-top: 25px;
+}
+
+.input-data-fim {
+  width: 200px;
+  height: 100px;
+  margin-left: 40%;
+  margin-top: -100px;
 }
