@@ -1,10 +1,9 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Transferencia } from 'src/model/transferencia-model';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
 import { TransferenciaService } from '../service/transferencia.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { TransferenciaFiltro } from '../../model/transferencia-filtro-model';
 
 
@@ -13,7 +12,7 @@ import { TransferenciaFiltro } from '../../model/transferencia-filtro-model';
   templateUrl: './tabela-transferencia.component.html',
   styleUrls: ['./tabela-transferencia.component.css']
 })
-export class TabelaTransferenciaComponent implements AfterViewInit, OnInit {
+export class TabelaTransferenciaComponent implements OnInit {
 
   listaTransferencias: Transferencia[] = new Array<Transferencia>();
   formBuilder: FormBuilder = new FormBuilder();
@@ -24,17 +23,11 @@ export class TabelaTransferenciaComponent implements AfterViewInit, OnInit {
   list: Transferencia[] = new Array<Transferencia>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  // @ViewChild(MatSort) sort: MatSort | undefined;
 
   constructor (private service: TransferenciaService,
     ) {
       const users = new Array<Transferencia>();
       this.dataSource = new MatTableDataSource(users);
-    }
-
-    ngAfterViewInit() {
-      // this.dataSource.paginator = this.paginator;
-      // this.dataSource.sort = this.sort;
     }
 
     ngOnInit(): void {
@@ -47,7 +40,7 @@ export class TabelaTransferenciaComponent implements AfterViewInit, OnInit {
         { dataTranferencia: '2020-03-03', valor: '400', tipo: 'Deposito', nomeOperadorTransacao: 'estevao' },
         { dataTranferencia: '2020-03-03', valor: '400', tipo: 'Deposito', nomeOperadorTransacao: 'estevao' },
       ]
-      // this.findAll();
+      this.findAll();
     }
 
     findAll() {
@@ -73,7 +66,9 @@ export class TabelaTransferenciaComponent implements AfterViewInit, OnInit {
     filtro.nomeOperadorTransacao = this.form.get('nomeOperadorTransacao')?.value ? this.form.get('nomeOperadorTransacao')?.value : null;
 
     if (filtro.dataInic && filtro.dataFim && filtro.nomeOperadorTransacao) {
-
+      this.service.findByDateAndOperador(filtro).subscribe((data) => {
+        this.listaTransferencias = data;
+      })
     } else
     if (filtro.dataInic || filtro.dataFim) {
       this.service.findByDate(filtro).subscribe((data) => {
@@ -81,7 +76,9 @@ export class TabelaTransferenciaComponent implements AfterViewInit, OnInit {
       })
     } else
     if (this.form.get('nomeOperadorTransacao')?.value) {
-
+      this.service.findByNomeOperador(filtro).subscribe((data) => {
+        this.listaTransferencias = data;
+      })
     }
   }
 }

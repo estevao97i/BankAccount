@@ -21,8 +21,6 @@ public class TransferenciaServico implements Serializable {
     private final TransferenciaRepositorio repositorio;
     private final ModelMapper modelMapper;
 
-
-
     public List<TransferenciaDto> findAll() {
         var listTransferencia= repositorio.findAll();
         return listTransferencia.stream()
