@@ -22,4 +22,14 @@ export class TransferenciaService {
     const url = `${this.baseUrl}/data/` + filtro;
     return this.http.get<Transferencia[]>(url);
   }
+
+  findByNomeOperador(filtro: TransferenciaFiltro): Observable<Transferencia[]> {
+    const url = `${this.baseUrl}/nome-operador/` + filtro;
+    return this.http.get<Transferencia[]>(url);
+  }
+
+  findByDateAndOperador(filtro: TransferenciaFiltro): Observable<Transferencia[]> {
+    const url = `${this.baseUrl}/data-operador/` + filtro;
+    return this.http.get<Transferencia[]>(url);
+  }
 }
